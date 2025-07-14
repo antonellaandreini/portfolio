@@ -6,10 +6,26 @@
   body {
     font-family: "Lato", sans-serif;
   }
+
+  html {
+    font-size: 16px;
+  }
+
+  @media (max-width: 640px) {
+    html {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    html {
+      font-size: 16px;
+    }
+  }
 }
 
 .prose h1 {
-  color: #4C63B6 !important;
+  color: #4c63b6 !important;
 }
 
 .prose p {
@@ -17,9 +33,9 @@
 }
 
 @theme {
-  --color-primary:  #4C63B6;
-  --color-primary-light:#E0E8F9;
-  --color-secondary: #7B93DB;
-  --color-secondary-600: #6C7CBF;
-  --color-secondary-400: #A0B2E0;
+  --color-primary: #4c63b6;
+  --color-primary-light: #e0e8f9;
+  --color-secondary: #7b93db;
+  --color-secondary-600: #6c7cbf;
+  --color-secondary-400: #a0b2e0;
 }

@@ -15,26 +15,30 @@ export default function Portfolio() {
           <div className="flex gap-8 items-start">
             {/* Left column with logo/slogan */}
             <div className="absolute left-0 w-full max-w-xs z-0">
-              <img src={sloganImage} alt="Logo" className="w-full h-auto mb-4" />
+              <img
+                src={sloganImage}
+                alt="Logo"
+                className="w-1/3 sm:w-1/2 md:w-2/3 lg:w-full h-auto mb-4"
+              />
             </div>
-            
+
             {/* Right column with content */}
             <div className="relative z-10 w-full text-center px-4">
-              <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-primary">
+              <h1 className="text-3xl sm:text-5xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-primary">
                 Antonella Andreini
               </h1>
-              <p className="mt-4 text-lg leading-8 text-gray-600">
+              <p className="mt-4 text-base sm:text-lg leading-6 sm:leading-8 text-gray-600">
                 Software Engineer
               </p>
 
               {/* Contact info */}
-              <div className="mt-4 flex justify-center items-center space-x-10 text-gray-600">
+              <div className="mt-4 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6 md:space-x-10 text-gray-600 text-base">
                 <div className="flex items-center space-x-2">
-                  <Phone className="w-5 h-5" />
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>+54 9 2355 488818</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Mail className="w-5 h-5" />
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>anto.andreini@gmail.com</span>
                 </div>
               </div>
@@ -80,8 +84,10 @@ export default function Portfolio() {
       {/* About Section */}
       <section className="px-8 py-20 bg-gradient-to-br from-primary-light to-grey-500">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-4 text-primary">About Me</h2>
-          <p className="text-gray-700 text-lg leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 text-primary">
+            About Me
+          </h2>
+          <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
             Software engineer who cares about user experience and performance,
             learning new things to deliver better results every day.
           </p>
@@ -91,7 +97,7 @@ export default function Portfolio() {
       {/* Skills Section */}
       <section className="px-8 py-20 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-semibold mb-8 text-primary">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-8 text-primary">
             Technologies & Skills
           </h2>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700">
@@ -117,7 +123,7 @@ export default function Portfolio() {
       {/* Experience Section */}
       <section className="px-8 py-20 bg-gradient-to-br from-primary-light to-grey-500">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-semibold mb-8 text-primary">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-8 text-primary">
             Experience
           </h2>
           <ul className="space-y-8">
@@ -170,7 +176,9 @@ export default function Portfolio() {
             ].map(({ role, dates, details }) => (
               <li key={role} className="space-y-2">
                 <div className="flex justify-between">
-                  <h3 className="text-xl font-medium text-gray-900">{role}</h3>
+                  <h3 className="text-lg sm:text-xl font-medium text-gray-900">
+                    {role}
+                  </h3>
                   <span className="text-sm text-gray-500">{dates}</span>
                 </div>
                 <ul className="list-disc list-inside text-gray-600">
@@ -187,7 +195,7 @@ export default function Portfolio() {
       {/* Blog Section */}
       <section className="px-8 py-20 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-semibold mb-8 text-primary">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-8 text-primary">
             From the Blog
           </h2>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -199,7 +207,7 @@ export default function Portfolio() {
                   key={post.slug}
                   className="bg-white border border-gray-200 rounded-lg p-6 shadow hover:shadow-lg transform hover:-translate-y-1 transition"
                 >
-                  <h4 className="text-lg font-semibold text-gray-900">
+                  <h4 className="text-base sm:text-lg font-semibold text-gray-900">
                     {post.meta.title}
                   </h4>
                   <time className="block text-sm text-gray-500 mt-1">
@@ -226,10 +234,10 @@ export default function Portfolio() {
       {/* Education Section */}
       <section className="px-8 py-20 bg-gradient-to-br from-primary-light to-grey-500">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-4 text-primary">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 text-primary">
             Education
           </h2>
-          <p className="text-gray-700 text-lg">
+          <p className="text-gray-700 text-base sm:text-lg">
             <strong>National University of La Plata (UNLP)</strong> — La Plata,
             Buenos Aires
             <br />
@@ -243,8 +251,8 @@ export default function Portfolio() {
       {/* Contact Section */}
       <section className="px-8 py-20 bg-white">
         <div className="max-w-xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-4 text-primary">
-            Let’s Connect
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 text-primary">
+            Let's Connect
           </h2>
           <p className="text-gray-600 mb-6">
             Feel free to reach out by email or LinkedIn—I’m always open to new

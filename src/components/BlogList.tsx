@@ -17,20 +17,20 @@ export const BlogList: React.FC = () => {
       <Breadcrumb items={breadcrumbItems} />
       <div className="flex gap-8">
         {/* Left column with logo/slogan */}
-        <div className="w-64 flex-shrink-0 opacity-30">
+        <div className="w-16 sm:w-24 md:w-32 lg:w-64 flex-shrink-0 opacity-30">
           <img src={sloganImage} alt="Logo" className="w-full h-auto mb-4" />
         </div>
         
         {/* Right column with content */}
         <div className="flex-1">
-          <h2 className="text-3xl font-semibold mb-8 text-primary">Blog</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-8 text-primary">Blog</h2>
           <ul className="space-y-8">
             {posts.map(({ slug, meta }) => (
               <li
                 key={slug}
                 className="bg-white border border-gray-200 rounded-lg p-6 shadow hover:shadow-lg transition"
               >
-                <h3 className="text-xl font-semibold text-primary">{meta.title}</h3>
+                <h3 className="text-lg sm:text-xl font-semibold text-primary">{meta.title}</h3>
                 <time className="block text-sm text-secondary">{meta.date}</time>
                 <Link
                   to={`/blog/${slug}`}

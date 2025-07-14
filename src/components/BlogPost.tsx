@@ -34,13 +34,13 @@ export const BlogPost: React.FC = () => {
       <Breadcrumb items={breadcrumbItems} />
       <div className="flex gap-8">
         {/* Left column with logo/slogan */}
-        <div className="w-64 flex-shrink-0">
+        <div className="w-16 sm:w-24 md:w-32 lg:w-64 flex-shrink-0">
           <img src={sloganImage} alt="Logo" className="w-full h-auto mb-4 opacity-30" />
         </div>
 
         {/* Right column with content */}
         <div className="flex-1">
-          <article className="prose prose-lg max-w-none">
+          <article className="prose prose-sm sm:prose-lg max-w-none">
             <time className="text-base text-gray-500 block mb-8">
               {meta.date}
             </time>
