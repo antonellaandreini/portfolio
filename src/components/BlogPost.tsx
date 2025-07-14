@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getPostBySlug } from "../utils/posts";
 import { Breadcrumb } from "./Breadcrumb";
@@ -7,6 +7,10 @@ import sloganImage from "../assets/slogan.png";
 export const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const entry = slug ? getPostBySlug(slug) : undefined;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
 
   const breadcrumbItems: { label: string; path?: string }[] = [
     { label: "Home", path: "/" },
