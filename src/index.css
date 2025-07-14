@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  body {
+    font-family: "Lato", sans-serif;
+  }
+}
+
+.prose h1 {
+  color: #4C63B6 !important;
+}
+
+.prose p {
+  text-align: justify;
+}
+
+@theme {
+  --color-primary:  #4C63B6;
+  --color-primary-light:#E0E8F9;
+  --color-secondary: #7B93DB;
+  --color-secondary-600: #6C7CBF;
+  --color-secondary-400: #A0B2E0;
+}

@@ -1,0 +1,42 @@
+export const frontmatter = {
+  title: "Performance issues or canvas error?",
+  date: "2025-07-02",
+  tags: ["typescript", "react", "canvas"],
+  description: "Canvas performance limits",
+};
+
+# Performance issues or canvas error?
+
+## Introduction
+
+While working on a PDF reader feature using react-pdf, with a canvas layer to render various shapes on top, we encountered a performance issue that only appeared with large files. In this post, I’ll walk you through how the ticket landed on our board, how I approached debugging it, and what I found along the way.
+
+## The problem
+
+Whenever a user uploads a file exceeding 10 pages, the app's performance degrades significantly, making it hard to use. Scrolling became sluggish, interactions were delayed, and overall responsiveness dropped.
+
+At first, we thought the issue might be related to the complexity of the PDF files or the number of interactive elements rendered on top. However, the same symptoms occurred across different files, as long as they were over a certain length.
+
+## Debugging Process
+
+In this blog post, I’ll tell you about a ticket I picked up a short time ago. First, some context about where I was working. At that time, in this particular project, I was implementing a view for a PDF reader where different types of interactive fields could be handled. In our team, we usually report tickets ourselves, so after the QA team tested a PDF with more than 10 pages, performance issues started to appear. They reported the issue, and it finally ended up on the team board under the name “performance issues with large files.”
+
+So, _What’s next?_ Like with any typical performance issue, I started by trying to reproduce the problem — and it was clearly there when working with files over 10 pages, so it was easy to replicate. My next step was to investigate re-renders, where I usually use the React Profiler. With it, I try to identify which components are being unnecessarily re-rendered, check if they’re re-rendering even when their props or state haven’t changed, etc.
+
+Nothing significant or very costly seemed to be happening...
+
+At this point, we noticed something interesting: When we change the browser's console size, the pdf changes the size too, and at one specific size, the page started running smoothly.
+
+After a long day of debugging and looking for info on how to improve the performance of our app, we found the answer to this question in this [Link](https://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element)
+
+## The Solution
+
+With this new insight, we revisited our implementation. We had been rendering a full-height canvas layer, matching the height of the entire PDF document. For long files, this meant a massive canvas, easily exceeding the safe browser limits.
+
+The fix was to constrain the canvas to a fixed viewport size (matching the visible area of the PDF), and then render shapes based on the scroll position rather than trying to map them all at once. This change kept the canvas size manageable while still allowing us to position elements accurately.
+
+## Conclusion
+
+Canvas limitations are not always visible or clearly documented, and most libraries don’t handle them automatically. This experience was a great reminder of how low-level browser constraints can manifest as seemingly random bugs.
+
+In our case, switching to a fixed-size canvas viewport and calculating shape positions based on scroll offset resolved the issue and restored smooth performance—even with files well over 10 pages.

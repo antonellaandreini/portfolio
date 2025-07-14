@@ -1,63 +1,78 @@
 import { Phone, Mail } from "lucide-react";
 import { SiGithub, SiLinkedin } from "react-icons/si";
+import { getAllPosts } from "../utils/posts";
+import { Link } from "react-router-dom";
+import sloganImage from "../assets/slogan.png";
 
 export default function Portfolio() {
+  const posts = getAllPosts().slice(0, 3); // Get latest 3 posts
+
   return (
     <main className="min-h-screen w-full bg-white text-gray-800 font-sans">
       {/* Hero Section */}
-      <section className="relative isolate px-8 pt-24 pb-32 lg:px-16">
-        <div className="mx-auto max-w-2xl text-center">
-          <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-primary">
-            Antonella Andreini
-          </h1>
-          <p className="mt-4 text-lg leading-8 text-gray-600">
-            Software Engineer
-          </p>
-
-          {/* Contact info */}
-          <div className="mt-4 flex justify-center items-center space-x-10 text-gray-600">
-            <div className="flex items-center space-x-2">
-              <Phone className="w-5 h-5" />
-              <span>+54 9 2355 488818</span>
+      <section className="relative isolate py-35">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex gap-8 items-start">
+            {/* Left column with logo/slogan */}
+            <div className="absolute left-0 w-full max-w-xs z-0">
+              <img src={sloganImage} alt="Logo" className="w-full h-auto mb-4" />
             </div>
-            <div className="flex items-center space-x-2">
-              <Mail className="w-5 h-5" />
-              <span>anto.andreini@gmail.com</span>
-            </div>
-          </div>
+            
+            {/* Right column with content */}
+            <div className="relative z-10 w-full text-center px-4">
+              <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-primary">
+                Antonella Andreini
+              </h1>
+              <p className="mt-4 text-lg leading-8 text-gray-600">
+                Software Engineer
+              </p>
 
-          {/* Button row */}
-          <div className="mt-10 flex justify-center gap-6">
-            <a
-              href="https://github.com/antonellandreini"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
-      inline-flex items-center justify-center
-      rounded-full bg-secondary px-6 py-3
-      text-sm font-semibold text-white shadow
-      border-2 border-transparent
-      hover:border-primary hover:bg-opacity-90
-      transition
-    "
-            >
-              <SiGithub className="w-5 h-5 mr-2" /> GitHub
-            </a>
-            <a
-              href="https://www.linkedin.com/in/antonella-andreini/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="
-      inline-flex items-center justify-center
-      rounded-full bg-secondary px-6 py-3
-      text-sm font-semibold text-white shadow
-      border-2 border-transparent
-      hover:border-primary hover:bg-opacity-90
-      transition
-    "
-            >
-              <SiLinkedin className="w-5 h-5 mr-2" /> LinkedIn
-            </a>
+              {/* Contact info */}
+              <div className="mt-4 flex justify-center items-center space-x-10 text-gray-600">
+                <div className="flex items-center space-x-2">
+                  <Phone className="w-5 h-5" />
+                  <span>+54 9 2355 488818</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Mail className="w-5 h-5" />
+                  <span>anto.andreini@gmail.com</span>
+                </div>
+              </div>
+
+              {/* Button row */}
+              <div className="mt-10 flex justify-center gap-6">
+                <a
+                  href="https://github.com/antonellandreini"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+          inline-flex items-center justify-center
+          rounded-full bg-secondary px-6 py-3
+          text-sm font-semibold text-white shadow
+          border-2 border-transparent
+          hover:border-primary hover:bg-opacity-90
+          transition
+        "
+                >
+                  <SiGithub className="w-5 h-5 mr-2" /> GitHub
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/antonella-andreini/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+          inline-flex items-center justify-center
+          rounded-full bg-secondary px-6 py-3
+          text-sm font-semibold text-white shadow
+          border-2 border-transparent
+          hover:border-primary hover:bg-opacity-90
+          transition
+        "
+                >
+                  <SiLinkedin className="w-5 h-5 mr-2" /> LinkedIn
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -176,44 +191,34 @@ export default function Portfolio() {
             From the Blog
           </h2>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {[
-              {
-                title: "Building a Real-Time Canvas with React & PubNub",
-                date: "June 10, 2025",
-                excerpt:
-                  "Walk through my process of architecting a collaborative whiteboard using React hooks and PubNub’s data streams.",
-                link: "/blog/real-time-canvas",
-              },
-              {
-                title: "E2E Testing Strategies with Cypress",
-                date: "May 28, 2025",
-                excerpt:
-                  "An in-depth look at structuring your Cypress suites, using feature flags, and integrating into GitHub Actions.",
-                link: "/blog/cypress-e2e-strategies",
-              },
-              {
-                title: "Optimizing Image Delivery on Static Sites",
-                date: "April 15, 2025",
-                excerpt:
-                  "How I chopped load times by 50% on Artifact Uprising’s store with lazy-loading, responsive srcsets, and S3 optimizations.",
-                link: "/blog/image-delivery-optimizations",
-              },
-            ].map(({ title, date, excerpt, link }) => (
-              <li
-                key={title}
-                className="bg-white border border-gray-200 rounded-lg p-6 shadow hover:shadow-lg transform hover:-translate-y-1 transition"
-              >
-                <h4 className="text-lg font-semibold text-gray-900">{title}</h4>
-                <time className="block text-sm text-gray-500 mt-1">{date}</time>
-                <p className="mt-2 text-gray-700 text-sm">{excerpt}</p>
-                <a
-                  href={link}
-                  className="mt-4 inline-block text-primary font-medium hover:underline text-sm"
+            {posts.length === 0 ? (
+              <li className="text-gray-500">No blog posts available yet.</li>
+            ) : (
+              posts.map((post) => (
+                <li
+                  key={post.slug}
+                  className="bg-white border border-gray-200 rounded-lg p-6 shadow hover:shadow-lg transform hover:-translate-y-1 transition"
                 >
-                  Read more →
-                </a>
-              </li>
-            ))}
+                  <h4 className="text-lg font-semibold text-gray-900">
+                    {post.meta.title}
+                  </h4>
+                  <time className="block text-sm text-gray-500 mt-1">
+                    {post.meta.date}
+                  </time>
+                  {post.meta.description && (
+                    <p className="mt-2 text-gray-700 text-sm">
+                      {post.meta.description}
+                    </p>
+                  )}
+                  <Link
+                    to={`/blog/${post.slug}`}
+                    className="mt-4 inline-block text-primary font-medium hover:underline text-sm"
+                  >
+                    Read more →
+                  </Link>
+                </li>
+              ))
+            )}
           </ul>
         </div>
       </section>
