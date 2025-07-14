@@ -11,7 +11,7 @@ export const frontmatter = {
 
 While working on a PDF reader feature using react-pdf, with a canvas layer to render various shapes on top, we encountered a performance issue that only appeared with large files. In this post, I’ll walk you through how the ticket landed on our board, how I approached debugging it, and what I found along the way.
 
-## The problem
+## The Bug
 
 Whenever a user uploads a file exceeding 10 pages, the app's performance degrades significantly, making it hard to use. Scrolling became sluggish, interactions were delayed, and overall responsiveness dropped.
 
