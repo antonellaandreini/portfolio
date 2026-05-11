@@ -1,0 +1,81 @@
+export const frontmatter = {
+  title: "Learning local-first: a sync story",
+  date: "2026-05-11",
+  tags: ["local-first", "dwn", "did", "sync", "architecture"],
+  description: "Notes from stepping out of the usual client/server model and into a local-first stack, where the user owns the data and sync stops being someone else's problem.",
+};
+
+# Learning local-first: a sync story
+
+## Introduction
+
+Most of my career I built the same kind of app: frontend, backend, central database. Sync was barely a topic. The server held the latest state, the client asked for it, the UI re-rendered.
+
+A recent project broke that model on day one. The architecture was local-first: each user has their own data node, identity is decentralized, and the "central database" I had been leaning on for years is not the source of truth anymore. This post is about the part that took me the longest to absorb, which is how sync actually works when there is no central database to sync against.
+
+## The mental shift
+
+The first thing I had to unlearn was the idea that the backend owns the data. In a typical app, if two devices show different values, the answer is easy: ask the server, the server wins. In a local-first model that question stops making sense. The server, if there is one at all, is not the authority. The user's node is.
+
+That looks clean in a diagram. In practice, it opens questions I had never had to answer:
+
+- If the user has three devices, which one is "right" after they edit something offline on two of them?
+- How does a counterparty find out that something changed on someone else's node?
+- How do you trust data that did not come from your own backend?
+
+Answering those questions, one at a time, was the real onboarding.
+
+## Where the data actually lives
+
+In this stack, every user's data sits in a DWN (Decentralized Web Node). Records inside the DWN are not rows in a shared table; they are signed objects owned by a DID, a decentralized identifier the user controls.
+
+The shift I had to make: stop thinking about *our database*, start thinking about *the user's records, which we are allowed to read under certain conditions*. It sounds small. It changed how I read every feature ticket after that.
+
+## How sync works, in general terms
+
+Once the data lives with the user, the next question shows up fast: how does anything stay in sync between devices, or between users, if no central database is keeping score?
+
+The answer in this SDK is simpler than I expected. Every client runs a loop on an interval (30 seconds in our product). On each tick:
+
+1. It **pushes** anything new that happened locally up to the user's remote DWN nodes.
+2. It **pulls** anything new that happened on those remote nodes back down to the local cache.
+
+To know what counts as "new", each direction keeps a watermark, a cursor that records how far it has already synced. The next tick only ships what is past that cursor.
+
+Around the core loop sit a few details that exist to keep it honest: an echo guard so a message you just pulled does not immediately get pushed back, separate cursors per device and per direction, and tombstones so deletes propagate instead of quietly vanishing. None of that changes the mental picture. It just keeps the loop from lying to itself.
+
+## What happens when two devices disagree
+
+Once the loop was in my head, the obvious worry was: two devices, both offline, both editing the same record. They reconnect. Sync now sees two competing updates for the same record. Who wins?
+
+In a typical client/server app the answer is "whoever wrote to the server first", which is a nice way of saying "luck". In a local-first model that is not good enough. Nobody is adjudicating in real time, and the user owns the data, so the outcome has to be predictable.
+
+The way this stack handles it is structural. Every update is a new signed message that references the original record. When both updates land on the user's DWN, the node does not try to merge them or guess a winner. It applies a rule that every other node will apply identically: the original write is kept, and so is the "most recent" write, where "most recent" comes from the record's timestamp with a stable tie-break if two timestamps match. The other write is dropped.
+
+The part that matters is not the rule itself. It is that every device, alone, ends up at the same answer without any of them needing to coordinate. Two phones, a desktop, and a hosted node all converge on the same final state, just by running the same logic over the same signed records.
+
+## Concurrency, the bug I actually fixed
+
+Reading the sync code was the first half of the onboarding. The second half was making it behave when a user had a lot of data.
+
+The original loop assumed every tick finished before the next one started. For a small account, that was true. For a user with thousands of records, a single pull could take longer than the 30-second interval. The next tick would fire while the previous one was still working, and now two pulls were running against the same queue and the same watermark store at the same time. The symptoms were ugly: duplicated work, watermarks moving in the wrong order, and the local view occasionally landing in a wrong state.
+
+The fix was small. I added two flags on the sync manager, `pullInProgress` and `pushInProgress`. Each direction checks its own flag before doing anything. If a previous sync is still running, the new tick skips and waits for the next interval. When the work finishes, success or error, the flag is cleared.
+
+What I liked about it is how quiet the change is. Light users do not notice. Heavy users stop racing against themselves. The 30-second cadence stays the same; the loop just refuses to do two things at once.
+
+The harder part was not writing the code. It was figuring out where the fix belonged. Earlier in the project I would have reached for a queue or a mutex library, or wanted to refactor the loop. The right answer was smaller: read the existing pattern, find the smallest thing that breaks under load, and add the smallest thing that holds it together.
+
+## The part that took the longest
+
+The watermarks and the flags were not the hard part. The hard part was rewiring the instinct that says "if the data looks wrong, check the server". In this model the server can be wrong. It can be behind. The truth lives in the user's DWN, and every consumer has to verify rather than trust.
+
+That changed how I read tickets. I stopped writing "the backend will return X" and started asking "whose DWN holds X, who is allowed to read it, and how does my view notice when it changes". Different questions. Different idea of what "correct" means. Once that landed, the rest of the stack stopped feeling foreign.
+
+## Conclusion
+
+Local-first is not really about offline mode. It is a different center of gravity. Data belongs to the user, identity belongs to the user, and the platform's job is to let applications and counterparties interact with that data on terms the user controls.
+
+For me, going from "central database developer" to "local-first developer" came down to one switch: stop treating the server as the source of truth, and start treating the user's signed records as the source of truth. After that switch, the sync loop, the watermarks, and the small in-progress flags stop feeling like obscure machinery and start feeling like the natural shape of the system.
+
+It left me with a question I still think about. If the user already holds their own data locally, signed and versioned, is this the shape that real reliability will eventually take? Not "the backend is up", but "your records are with you, and any service is just a way to interact with them". I do not know if every app will end up here. The more I work in this model, the more central-database reliability starts to look like a workaround for a problem local-first does not have.
