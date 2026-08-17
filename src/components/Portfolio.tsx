@@ -7,7 +7,7 @@ import {getAllPosts} from '../utils/posts';
 const skillGroups = [
   {
     title: 'Frontend',
-    skills: ['React', 'Next.js', 'TypeScript', 'JavaScript'],
+    skills: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS'],
   },
   {
     title: 'Backend & APIs',
@@ -180,11 +180,12 @@ export default function Portfolio() {
         <div className='mx-auto max-w-4xl'>
           <h2 className='text-3xl font-semibold text-primary'>About</h2>
           <p className='mt-6 text-lg leading-8 text-gray-700'>
-            I build full-stack products with React, Next.js, TypeScript, Node.js,
-            and Python. My work spans customer-facing features, performance and
-            reliability, automated testing, open-source repositories, and
-            AI-assisted engineering workflows. I care about maintainable systems
-            and taking product work from an unclear need to production.
+            I build full-stack products with React, Next.js, TypeScript, Tailwind
+            CSS, Node.js, and Python. My work spans customer-facing features,
+            performance and reliability, automated testing, open-source
+            repositories, and AI-assisted engineering workflows. I care about
+            maintainable systems and taking product work from an unclear need to
+            production.
           </p>
         </div>
       </section>
